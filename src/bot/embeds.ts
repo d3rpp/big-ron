@@ -1,5 +1,6 @@
 import { Colors, EmbedBuilder } from 'discord.js';
 import { ArticlePost } from '../wordpress/article';
+import decodeHe from '../wordpress/util';
 
 const MAX_DESC = 2047;
 
@@ -9,7 +10,7 @@ function getEmbed(): EmbedBuilder {
 
 export function getPostEmbed(article: ArticlePost): EmbedBuilder {
   const getDesc = () => {
-    let result = article.caption;
+    let result = decodeHe(article.caption);
     if (result.length > MAX_DESC) {
       const suffix = `... [View more here!](${article.url})`;
       const end = (MAX_DESC - 1) - suffix.length;
