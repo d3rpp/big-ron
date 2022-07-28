@@ -19,19 +19,16 @@ export const getArticleDetails = (APIRoot: string, postId: string): Promise<Arti
 
     // Get Author Props
     // eslint-disable-next-line no-underscore-dangle
-    const authorResponse = await fetch(articleResponseTyped._links.author[0].href);
+    const authorResponse = await fetch(`${articleResponseTyped._links.author[0].href}?_fields=name,avatar_urls`);
 
     const authorResponseTyped = (await authorResponse.json()) as User;
 
-    const authPfp = authorResponseTyped.avatar_urls;
-
-    // eslint-disable-next-line max-len
-    const pfpSizes: string[] = Object.keys(authPfp).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+    const authPfp = authorResponseTyped.avatar_urls['96'];
 
     const returnValue: ArticlePost = {
       author: {
         // This should hopefully get us the largest one
-        profile_picture_url: (authorResponseTyped.avatar_urls as any)[pfpSizes[-1]],
+        profile_picture_url: authPfp,
         profile_name: authorResponseTyped.name,
       },
       title: articleResponseTyped.yoast_head_json.og_title,
