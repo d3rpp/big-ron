@@ -1,8 +1,9 @@
-import { Client } from 'discord.js';
-import { getToken } from '../config';
+import { Client, Guild } from 'discord.js';
+import { getDevServer as getDevServerId, getToken } from '../config';
 import onInteraction from './events';
 
 let botInstance: Client | null = null;
+let devServer: Guild | null | undefined;
 
 export function getBot(): Client {
   if (botInstance !== null) {
@@ -12,6 +13,20 @@ export function getBot(): Client {
     intents: ['Guilds'],
   });
   return botInstance;
+}
+
+export async function getDevServer(): Promise<Guild | null> {
+  if (devServer !== undefined) {
+    return devServer;
+  }
+  const devServerId = getDevServerId();
+  if (devServerId === null) {
+    devServer = null;
+    return null;
+  }
+  const bot = getBot();
+  devServer = await bot.guilds.fetch(devServerId);
+  return devServer;
 }
 
 export default async function startBot(): Promise<void> {
