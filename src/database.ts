@@ -52,7 +52,7 @@ export async function getLastChecked(guildId: string): Promise<Date | null> {
 }
 
 export async function getConfig(guildId: string): Promise<GuildConfig | null> {
-  const result = await getCache<GuildConfig>(`${guildId}-configj`);
+  const result = await getCache<GuildConfig>(`${guildId}-config`);
   if (result !== null) {
     return result;
   }
@@ -62,4 +62,32 @@ export async function getConfig(guildId: string): Promise<GuildConfig | null> {
     await setCache(`${guildId}-config`, result);
   }
   return config;
+}
+
+export async function createConfig(data: GuildConfig): Promise<GuildConfig> {
+  const client = getPrismaClient();
+  const config = await client.guildConfig.create({ data });
+  await setCache(`${data.guildId}-config`, config);
+  return config;
+}
+
+export async function setConfig(data: GuildConfig): Promise<GuildConfig> {
+  const client = getPrismaClient();
+
+  const oldConfig = await client.guildConfig.findFirst({
+    where: {
+      guildId: data.guildId,
+    },
+  });
+  if (!oldConfig) return createConfig(data);
+
+  const newConfig = await client.guildConfig.update({
+    data,
+    where: {
+      guildId: data.guildId,
+    },
+  });
+
+  await setCache(`${data.guildId}-config`, newConfig);
+  return newConfig;
 }
