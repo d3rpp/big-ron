@@ -3,12 +3,10 @@ import { User } from '../types/wordpress/User';
 
 import { ArticlePost } from './article';
 
-export const API_ROOT = 'https://randy.gg';
-
 // https://developer.wordpress.org/rest-api/using-the-rest-api/global-parameters/
 const API_QUERY_FIELDS = 'id,date_gmt,yoast_head_json.og_title,yoast_head_json.og_description,yoast_head_json.canonical,yoast_head_json.og_image[].url,yoast_head_json.author,date';
 
-// eslint-disable-next-line max-len, no-async-promise-executor
+// eslint-disable-next-line max-len, no-async-promise-executor, import/prefer-default-export
 export const getArticleDetails = (APIRoot: string, postId: string): Promise<ArticlePost> => new Promise<ArticlePost>(async (resolve, reject) => {
   try {
     // gets Post with id
@@ -19,7 +17,7 @@ export const getArticleDetails = (APIRoot: string, postId: string): Promise<Arti
 
     // Get Author Props
     const authorResponse = await fetch(
-      `${API_ROOT}/wp-json/wp/v2/users/${articleResponseTyped.author}?_fields=name,avatar_urls`,
+      `${APIRoot}/wp-json/wp/v2/users/${articleResponseTyped.author}?_fields=name,avatar_urls`,
     );
 
     const authorResponseTyped = (await authorResponse.json()) as User;
