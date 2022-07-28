@@ -29,6 +29,7 @@ const commands: CommandDraft[] = [
     builder: new SlashCommandBuilder()
       .setName('config')
       .setDescription('configure the bot.')
+      .setDefaultMemberPermissions('ADMINISTRATOR')
       .addRoleOption((opt) => opt
         .setName('role')
         .setDescription('The role to ping for new posts.')
