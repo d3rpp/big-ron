@@ -3,11 +3,12 @@ import {
   ApplicationCommandManager,
   ChannelType,
   ChatInputCommandInteraction,
+  PermissionFlagsBits,
   RESTPostAPIApplicationCommandsJSONBody,
   SlashCommandBuilder,
 } from 'discord.js';
-import { getBot, getDevServer } from '.';
-import cmdConfig from './config';
+import { getBot, getDevServer } from './index';
+import cmdConfig, { cmdScan } from './config';
 
 // eslint-disable-next-line no-unused-vars
 type CommandHandler = (int: ChatInputCommandInteraction) => Promise<void>;
@@ -29,7 +30,7 @@ const commands: CommandDraft[] = [
     builder: new SlashCommandBuilder()
       .setName('config')
       .setDescription('configure the bot.')
-      .setDefaultMemberPermissions('ADMINISTRATOR')
+      .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
       .addRoleOption((opt) => opt
         .setName('role')
         .setDescription('The role to ping for new posts.')
@@ -43,6 +44,13 @@ const commands: CommandDraft[] = [
         .setName('website')
         .setDescription('The WordPress site to utilize.')
         .setRequired(true))
+      .toJSON(),
+  },
+  {
+    handler: cmdScan,
+    builder: new SlashCommandBuilder()
+      .setName('scan')
+      .setDescription('A debug command for this bot.')
       .toJSON(),
   },
 ];

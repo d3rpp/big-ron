@@ -1,5 +1,5 @@
 import { GuildConfig } from '@prisma/client';
-import { getBot } from '.';
+import { getBot } from './index.js';
 import { Article } from '../types/wordpress/Article';
 import { getPostEmbed } from './embeds';
 

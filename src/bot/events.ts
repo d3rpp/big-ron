@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, Interaction } from 'discord.js';
-import { getErrorEmbed } from './embeds';
-import { resolve } from './register';
+import { getErrorEmbed } from './embeds.js';
+import { registerAll, resolve } from './register';
 
 async function onCommand(int: ChatInputCommandInteraction): Promise<void> {
   const name = int.commandName;
@@ -20,8 +20,12 @@ async function onCommand(int: ChatInputCommandInteraction): Promise<void> {
   await cmd.handler(int).catch(handleErr);
 }
 
-export default async function onInteraction(int: Interaction): Promise<void> {
+export async function onInteraction(int: Interaction): Promise<void> {
   if (int.isChatInputCommand()) {
     await onCommand(int);
   }
+}
+
+export async function onReady(): Promise<void> {
+  await registerAll();
 }
