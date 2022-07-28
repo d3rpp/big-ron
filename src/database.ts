@@ -22,7 +22,6 @@ function getRedisClient(): RedisClientType {
   return redisInstance;
 }
 
-// eslint-disable-next-line no-unused-vars
 async function getCache<T>(key: string): Promise<T | null> {
   const client = getRedisClient();
   const val = await client.get(key);
@@ -32,7 +31,6 @@ async function getCache<T>(key: string): Promise<T | null> {
   return val;
 }
 
-// eslint-disable-next-line no-unused-vars
 async function setCache<T>(key: string, val: T): Promise<void> {
   const client = getRedisClient();
   const valStr = JSON.stringify(val);
