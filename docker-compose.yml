@@ -1,6 +1,6 @@
 services:
     redis:
-        image: 7.0.4-alpine
+        image: redis:7.0.4-alpine
     postgres:
         image: postgres:14.2-alpine
         environment:
@@ -8,7 +8,7 @@ services:
             - PGDATA=/var/lib/postgresql/data/pgdata
         volumes:
             - "big-ron-data:/var/lib/postgresql/data/pgdata"
-    boolean:
+    big-ron:
         build: .
         env_file:
             - .env
