@@ -1,11 +1,11 @@
 import { GuildConfig } from '@prisma/client';
 import { getBot } from './index.js';
-import { Article } from '../types/wordpress/Article';
 import { getPostEmbed } from './embeds';
+import { ArticlePost } from '../wordpress/article.js';
 
 export default async function post(
   guild: GuildConfig,
-  article: Article,
+  article: ArticlePost,
 ): Promise<void> {
   const bot = getBot();
   const channel = await bot.channels.fetch(guild.channelId);

@@ -1,5 +1,5 @@
 import { Colors, EmbedBuilder } from 'discord.js';
-import { Article } from '../types/wordpress/Article';
+import { ArticlePost } from '../wordpress/article';
 
 const MAX_DESC = 2047;
 
@@ -7,11 +7,11 @@ function getEmbed(): EmbedBuilder {
   return new EmbedBuilder();
 }
 
-export function getPostEmbed(article: Article): EmbedBuilder {
+export function getPostEmbed(article: ArticlePost): EmbedBuilder {
   const getDesc = () => {
-    let result = article.yoast_head_json.og_description;
+    let result = article.caption;
     if (result.length > MAX_DESC) {
-      const suffix = `... [View more here!](${article.yoast_head_json.canonical})`;
+      const suffix = `... [View more here!](${article.url})`;
       const end = (MAX_DESC - 1) - suffix.length;
       const newDesc = result.substring(0, end);
       result = newDesc + suffix;
@@ -19,15 +19,16 @@ export function getPostEmbed(article: Article): EmbedBuilder {
     return result;
   };
   return getEmbed()
-    .setTitle(article.yoast_head_json.og_title)
+    .setTitle(article.title)
     .setDescription(getDesc())
     .setColor(Colors.Blue)
-    .setURL(article.yoast_head_json.canonical)
-    .setThumbnail(article.yoast_head_json.og_image[0]?.url || null)
+    .setURL(article.url)
+    .setThumbnail(article.thumbnail_url)
     .setAuthor({
-      name: article.yoast_head_json.author,
+      name: article.author.profile_name,
+      iconURL: article.author.profile_picture_url,
     })
-    .setTimestamp(new Date(article.date_gmt));
+    .setTimestamp(new Date(article.date));
 }
 
 export function getErrorEmbed(e: unknown): EmbedBuilder {
