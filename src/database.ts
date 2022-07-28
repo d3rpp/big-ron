@@ -63,6 +63,7 @@ export async function afterIdPosted(id: number, wordpress: string, guild: string
   const prismadb = getPrismaClient();
   const insertResult = prismadb.postedId.create({
     data: {
+      uniqueId: `${guild}-${id}`,
       id,
       wordpress,
       guild,
