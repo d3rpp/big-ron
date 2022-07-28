@@ -1,4 +1,6 @@
 services:
+    redis:
+        image: 7.0.4-alpine
     postgres:
         image: postgres:14.2-alpine
         environment:
@@ -13,5 +15,6 @@ services:
         restart: always
         links:
             - postgres
+            - redis
 volumes:
     big-ron-data: {}

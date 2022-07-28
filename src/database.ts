@@ -1,7 +1,9 @@
 import { GuildConfig, PrismaClient } from '@prisma/client';
+import { createClient, RedisClientType } from 'redis';
+import { getRedisUrl } from './config';
 
 let prismaInstance: PrismaClient | null = null;
-// let redisInstance: RedisClientType | null = null;
+let redisInstance: RedisClientType | null = null;
 
 function getPrismaClient(): PrismaClient {
   if (prismaInstance !== null) {
@@ -11,30 +13,32 @@ function getPrismaClient(): PrismaClient {
   return prismaInstance;
 }
 
-// TODO(dylhack): cache
-// function getRedisClient(): RedisClientType {
-//   if (redisInstance !== null) {
-//     return redisInstance;
-//   }
-//   const url = getRedisUrl();
-//   redisInstance = createClient({ url });
-//   promisifyAll(redisInstance);
-//   return redisInstance;
-// }
-
-// eslint-disable-next-line no-unused-vars
-async function getCache(key: string): Promise<string | null> {
-  // TODO(dylhack): cache
-  return null;
+function getRedisClient(): RedisClientType {
+  if (redisInstance !== null) {
+    return redisInstance;
+  }
+  const url = getRedisUrl();
+  redisInstance = createClient({ url });
+  return redisInstance;
 }
 
-// eslint-disable-next-line no-unused-vars
-async function setCache(key: string, val: string): Promise<void> {
-  // TODO(dylhack): cache
+async function getCache<T>(key: string): Promise<T | null> {
+  const client = getRedisClient();
+  const val = await client.get(key);
+  if (val !== null) {
+    return JSON.parse(val);
+  }
+  return val;
+}
+
+async function setCache<T>(key: string, val: T): Promise<void> {
+  const client = getRedisClient();
+  const valStr = JSON.stringify(val);
+  await client.set(key, valStr);
 }
 
 export async function getLastChecked(guildId: string): Promise<Date | null> {
-  const result = await getCache(`${guildId}-last`);
+  const result = await getCache<string>(`${guildId}-last`);
   if (result !== null) {
     return new Date(result);
   }
@@ -48,11 +52,14 @@ export async function getLastChecked(guildId: string): Promise<Date | null> {
 }
 
 export async function getConfig(guildId: string): Promise<GuildConfig | null> {
-  const result = await getCache(`${guildId}-configj`);
+  const result = await getCache<GuildConfig>(`${guildId}-configj`);
   if (result !== null) {
-    return JSON.parse(result);
+    return result;
   }
   const client = getPrismaClient();
   const config = await client.guildConfig.findFirst({ where: { guildId } });
+  if (config !== null) {
+    await setCache(`${guildId}-config`, result);
+  }
   return config;
 }

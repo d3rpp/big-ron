@@ -5,6 +5,7 @@ COPY package.json /opt/app
 
 ENV BOT_TOKEN=""
 ENV DATABASE_URL=""
+ENV REDIS_URL=""
 
 RUN npm install
 
