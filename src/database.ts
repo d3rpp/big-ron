@@ -44,6 +44,34 @@ async function setCache<T>(key: string, field: string, val: T): Promise<void> {
   await client.hSet(key, field, valStr);
 }
 
+export async function checkIdsInDB(ids: number[], wordpress: string, guild: string) {
+  const prismadb = getPrismaClient();
+  const ret = await prismadb.postedId.findMany({
+    where: {
+      id: {
+        in: ids,
+      },
+      wordpress,
+      guild,
+    },
+  });
+
+  return ret.map((item) => item.id);
+}
+
+export async function afterIdPosted(id: number, wordpress: string, guild: string) {
+  const prismadb = getPrismaClient();
+  const insertResult = prismadb.postedId.create({
+    data: {
+      id,
+      wordpress,
+      guild,
+    },
+  });
+
+  await insertResult;
+}
+
 export async function getLastChecked(guildId: string): Promise<Date | null> {
   const result = await getCache<string>('last-checked', guildId);
   if (result !== null) {
@@ -52,7 +80,7 @@ export async function getLastChecked(guildId: string): Promise<Date | null> {
   const client = getPrismaClient();
   const last = await client.lastChecked.findFirst({ where: { guildId } });
   if (last !== null) {
-    await setCache('last-checke', guildId, last.last.toString());
+    await setCache('last-checked', guildId, last.last.toString());
     return last.last;
   }
   return null;

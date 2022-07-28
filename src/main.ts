@@ -1,9 +1,15 @@
 import startBot from './bot';
 import post from './bot/posts';
-import decodeHe from './wordpress/util';
+import { getUpdates } from './wordpress/update';
+
+const TEN_MINUTES = 10 * 60 * 1000;
 
 async function main(): Promise<void> {
-  console.log('Hello world!');
+  await startBot();
+
+  setInterval(() => {
+    getUpdates(post);
+  }, TEN_MINUTES);
 }
 
 main();
