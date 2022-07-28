@@ -1,4 +1,4 @@
-import { GuildConfig, PrismaClient } from '@prisma/client';
+import { GuildConfig, prisma, PrismaClient } from '@prisma/client';
 import { createClient, RedisClientType } from 'redis';
 import { getRedisUrl } from './config';
 
@@ -52,7 +52,7 @@ export async function getLastChecked(guildId: string): Promise<Date | null> {
 }
 
 export async function getConfig(guildId: string): Promise<GuildConfig | null> {
-  const result = await getCache<GuildConfig>(`${guildId}-configj`);
+  const result = await getCache<GuildConfig>(`${guildId}-config`);
   if (result !== null) {
     return result;
   }
@@ -62,4 +62,34 @@ export async function getConfig(guildId: string): Promise<GuildConfig | null> {
     await setCache(`${guildId}-config`, result);
   }
   return config;
+}
+
+export async function setConfig(guildId: string, data: Omit<GuildConfig, "guildId">): Promise<GuildConfig> {
+  const client = getPrismaClient();
+
+  const oldConfig = await client.guildConfig.findFirst({ where: { guildId } });
+  if (!oldConfig) return await createConfig(guildId, data);
+
+  const config = await client.guildConfig.update({
+    data,
+    where: {
+      guildId,  
+    },
+  })
+
+  await setCache(`${guildId}-config`, config);
+  return config;
+}
+
+export async function createConfig(guildId: string, data: Omit<GuildConfig, "guildId">): Promise<GuildConfig> {
+    const client = getPrismaClient();
+    const config = await client.guildConfig.create({
+      data: {
+        guildId,
+        ...data
+      }
+    });
+
+    await setCache(`${guildId}-config`, config);
+    return config;
 }
