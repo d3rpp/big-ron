@@ -25,7 +25,8 @@ model LastChecked {
 }
 
 model PostedId {
-  id        Int         @id
+  uniqueId  String      @id
+  id        Int
   wordpress String
   guild     String
 }
