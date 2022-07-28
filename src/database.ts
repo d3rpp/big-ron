@@ -64,7 +64,7 @@ export async function getConfig(guildId: string): Promise<GuildConfig | null> {
   return config;
 }
 
-export async function setConfig(guildId: string, data: Omit<GuildConfig, "guildId">): Promise<GuildConfig> {
+export async function setConfig(guildId: string, data: GuildConfig): Promise<GuildConfig> {
   const client = getPrismaClient();
 
   const oldConfig = await client.guildConfig.findFirst({ where: { guildId } });
@@ -73,7 +73,7 @@ export async function setConfig(guildId: string, data: Omit<GuildConfig, "guildI
   const config = await client.guildConfig.update({
     data,
     where: {
-      guildId,  
+      guildId,
     },
   })
 
