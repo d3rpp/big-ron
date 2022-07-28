@@ -21,9 +21,11 @@ export const getUpdates = async (callback: UpdateCallback) => {
     const ids: PostResponse = await postResponses.json() as PostResponse;
 
     const idsToCheck = ids.map((item) => item.id);
-    const idsNotPosted = await checkIdsInDB(idsToCheck, guildConfig.wordpress, guildConfig.guildId);
+    const idsPosted = await checkIdsInDB(idsToCheck, guildConfig.wordpress, guildConfig.guildId);
 
-    idsNotPosted.forEach(async (item) => {
+    idsToCheck.forEach(async (item) => {
+      if (idsPosted.includes(item)) return;
+
       const articleDetails = await getArticleDetails(guildConfig.wordpress, item.toString(10));
 
       await callback(guildConfig, articleDetails).then(() => {
