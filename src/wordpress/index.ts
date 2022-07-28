@@ -19,7 +19,7 @@ export const getArticleDetails = (APIRoot: string, postId: string): Promise<Arti
 
     // Get Author Props
     const authorResponse = await fetch(
-      `${API_ROOT}/wp-json/wp/v2/users/${articleResponseTyped.author}`,
+      `${API_ROOT}/wp-json/wp/v2/users/${articleResponseTyped.author}?_fields=name,avatar_urls`,
     );
 
     const authorResponseTyped = (await authorResponse.json()) as User;
@@ -31,6 +31,7 @@ export const getArticleDetails = (APIRoot: string, postId: string): Promise<Arti
 
     const returnValue: ArticlePost = {
       author: {
+        // This should hopefully get us the largest one
         profile_picture_url: (authorResponseTyped.avatar_urls as any)[pfpSizes[-1]],
         profile_name: authorResponseTyped.name,
       },
