@@ -28,9 +28,8 @@ export const getUpdates = async (callback: UpdateCallback) => {
 
       const articleDetails = await getArticleDetails(guildConfig.wordpress, item.toString(10));
 
-      await callback(guildConfig, articleDetails).then(() => {
-        afterIdPosted(item, guildConfig.wordpress, guildConfig.channelId);
-      });
+      await callback(guildConfig, articleDetails);
+      await afterIdPosted(item, guildConfig.wordpress, guildConfig.channelId);
     });
   });
 };
