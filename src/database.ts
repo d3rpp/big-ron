@@ -44,24 +44,28 @@ async function setCache<T>(key: string, field: string, val: T): Promise<void> {
   await client.hSet(key, field, valStr);
 }
 
-export async function checkIdsInDB(ids: number[]) {
+export async function checkIdsInDB(ids: number[], wordpress: string, guild: string) {
   const prismadb = getPrismaClient();
   const ret = await prismadb.postedId.findMany({
     where: {
       id: {
         in: ids,
       },
+      wordpress,
+      guild,
     },
   });
 
   return ret.map((item) => item.id);
 }
 
-export async function afterIdPosted(id: number) {
+export async function afterIdPosted(id: number, wordpress: string, guild: string) {
   const prismadb = getPrismaClient();
   const insertResult = prismadb.postedId.create({
     data: {
       id,
+      wordpress,
+      guild,
     },
   });
 
