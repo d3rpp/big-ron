@@ -76,7 +76,7 @@ export async function getLastChecked(guildId: string): Promise<Date | null> {
   const client = getPrismaClient();
   const last = await client.lastChecked.findFirst({ where: { guildId } });
   if (last !== null) {
-    await setCache('last-checke', guildId, last.last.toString());
+    await setCache('last-checked', guildId, last.last.toString());
     return last.last;
   }
   return null;
