@@ -8,8 +8,6 @@ const defaultConfig: Omit<GuildConfig, "guildId"> = {
   wordpress: ""
 }
 
-// NOTE(conaticus): This will need changing if we introduce 
-//                  options that are not strings
 export default async function cmdConfig(
   int: ChatInputCommandInteraction,
 ): Promise<void> {
