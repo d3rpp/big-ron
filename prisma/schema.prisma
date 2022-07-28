@@ -11,8 +11,15 @@ datasource db {
 }
 
 model GuildConfig {
-  guildId   String  @id
-  roleId    String?
-  channelId String
-  wordpress String
+  guildId     String       @id
+  roleId      String?
+  channelId   String
+  wordpress   String
+  lastChecked LastChecked?
+}
+
+model LastChecked {
+  last    BigInt
+  guildId String      @id
+  guild   GuildConfig @relation(fields: [guildId], references: [guildId])
 }
