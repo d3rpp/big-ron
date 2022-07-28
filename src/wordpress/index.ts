@@ -1,3 +1,5 @@
+import { fetch } from 'undici';
+
 import { Article } from '../types/wordpress/Article';
 import { User } from '../types/wordpress/User';
 

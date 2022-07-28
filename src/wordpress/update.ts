@@ -1,4 +1,6 @@
 import { GuildConfig } from '@prisma/client';
+import { fetch } from 'undici';
+
 import { getArticleDetails } from '.';
 import { afterIdPosted, checkIdsInDB, getAllConfigs } from '../database';
 import { ArticlePost } from './article';
@@ -16,7 +18,7 @@ export const getUpdates = async (callback: UpdateCallback) => {
 
   configs.forEach(async (guildConfig) => {
     const postResponses = await fetch(`${guildConfig.wordpress}/wp-json/wp/v2/posts?_fields=id`);
-    const ids: PostResponse = await postResponses.json();
+    const ids: PostResponse = await postResponses.json() as PostResponse;
 
     const idsToCheck = ids.map((item) => item.id);
     const idsNotPosted = await checkIdsInDB(idsToCheck, guildConfig.wordpress, guildConfig.guildId);
