@@ -27,7 +27,7 @@ export default async function post(
   // NOTE(dylhack): this is intentional use over Role.prototype.toString
   //                so that the users can be informed that the role has not
   //                been updated.
-  const role = `<&${guild.roleId}>`;
+  const role = `<@&${guild.roleId}>`;
   const embed = getPostEmbed(article);
   await channel.send({
     content: role,
