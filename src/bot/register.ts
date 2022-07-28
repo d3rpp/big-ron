@@ -1,4 +1,5 @@
 import {
+  ApplicationCommand,
   ApplicationCommandManager,
   ChannelType,
   ChatInputCommandInteraction,
@@ -58,15 +59,18 @@ export async function registerAll(): Promise<void> {
   const bot = getBot();
   const devServer = await getDevServer();
 
-  // clear currently registered
-  if (devServer !== null) {
-    devServer.commands.cache.forEach((c) => tasks.push(c.delete()));
-  }
   if (bot.application === null) {
     throw new Error(
       "The instance's application data has not reachable,"
       + ' how did we get here?',
     );
+  }
+  // clear currently registered
+  const clear = (c: ApplicationCommand) => tasks.push(c.delete());
+  if (devServer !== null) {
+    devServer.commands.cache.forEach(clear);
+  } else {
+    bot.application.commands.cache.forEach(clear);
   }
 
   const target = devServer !== null
