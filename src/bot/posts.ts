@@ -24,7 +24,7 @@ export default async function post(
   }
 
   //                                             (in discord.js package)
-  // NOTE(dylhack): this intentional to use over Role.prototype.toString
+  // NOTE(dylhack): this is intentional use over Role.prototype.toString
   //                so that the users can be informed that the role has not
   //                been updated.
   const role = `<&${guild.roleId}>`;
