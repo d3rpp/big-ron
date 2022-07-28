@@ -27,12 +27,13 @@ export const getUpdates = async (callback: UpdateCallback) => {
     for (let i = 0; i < idsToCheck.length; i += 1) {
       const item = idsToCheck[i];
 
-      if (idsPosted.includes(item)) return;
+      // eslint-disable-next-line no-continue
+      if (idsPosted.includes(item)) continue;
 
       const articleDetails = await getArticleDetails(guildConfig.wordpress, item.toString(10));
 
       await callback(guildConfig, articleDetails);
-      await afterIdPosted(item, guildConfig.wordpress, guildConfig.channelId);
+      await afterIdPosted(item, guildConfig.wordpress, guildConfig.guildId);
     }
   });
 };
