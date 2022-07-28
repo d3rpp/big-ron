@@ -23,3 +23,7 @@ model LastChecked {
     guildId String      @id
     guild   GuildConfig @relation(fields: [guildId], references: [guildId])
 }
+
+model PostedId {
+    id    Int           @id
+}
