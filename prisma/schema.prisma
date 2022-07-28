@@ -19,7 +19,7 @@ model GuildConfig {
 }
 
 model LastChecked {
-  last    BigInt
+  last   DateTime 
   guildId String      @id
   guild   GuildConfig @relation(fields: [guildId], references: [guildId])
 }
