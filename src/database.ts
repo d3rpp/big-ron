@@ -120,6 +120,13 @@ export async function setConfig(data: GuildConfig): Promise<GuildConfig> {
     },
   });
 
+  // clear memory of posted articles
+  await client.postedId.deleteMany({
+    where: {
+      guild: data.guildId,
+    },
+  });
+
   await setCache('config', data.guildId, newConfig);
   return newConfig;
 }
