@@ -8,7 +8,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import { getBot, getDevServer } from './index';
-import cmdConfig, { cmdScan } from './config';
+import cmdConfig from './config';
 
 // eslint-disable-next-line no-unused-vars
 type CommandHandler = (int: ChatInputCommandInteraction) => Promise<void>;
@@ -44,13 +44,6 @@ const commands: CommandDraft[] = [
         .setName('website')
         .setDescription('The WordPress site to utilize.')
         .setRequired(true))
-      .toJSON(),
-  },
-  {
-    handler: cmdScan,
-    builder: new SlashCommandBuilder()
-      .setName('scan')
-      .setDescription('A debug command for this bot.')
       .toJSON(),
   },
 ];
