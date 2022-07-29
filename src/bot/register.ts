@@ -70,9 +70,9 @@ export async function registerAll(): Promise<void> {
   // clear currently registered
   const clear = (c: ApplicationCommand) => tasks.push(c.delete());
   if (devServer !== null) {
-    devServer.commands.cache.forEach(clear);
+    (await devServer.commands.fetch()).forEach(clear);
   } else {
-    bot.application.commands.cache.forEach(clear);
+    (await bot.application.commands.fetch()).forEach(clear);
   }
 
   const target = devServer !== null
