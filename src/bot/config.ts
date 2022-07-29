@@ -1,5 +1,7 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import { setConfig } from '../database';
+import { getUpdates } from '../wordpress/update';
+import post from './posts';
 
 export default async function cmdConfig(
   int: ChatInputCommandInteraction,
@@ -18,8 +20,10 @@ export default async function cmdConfig(
     wordpress,
   });
 
+  // check if we can send in the channel
+  await getUpdates(post);
   await int.reply({
     ephemeral: true,
-    content: 'Configured.',
+    content: 'Done.',
   });
 }
