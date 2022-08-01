@@ -25,6 +25,10 @@ export const getArticleDetails = (APIRoot: string, postId: string): Promise<Arti
     const authorResponseTyped = (await authorResponse.json()) as User;
 
     const authPfp = authorResponseTyped.avatar_urls['96'];
+    const ogImage = articleResponseTyped.yoast_head_json.og_image;
+    const thumbnailUrl = ogImage !== undefined
+      ? ogImage[0]?.url || null
+      : null;
 
     const returnValue: ArticlePost = {
       author: {
@@ -36,7 +40,7 @@ export const getArticleDetails = (APIRoot: string, postId: string): Promise<Arti
       caption: articleResponseTyped.yoast_head_json.og_description,
       url: articleResponseTyped.yoast_head_json.canonical,
       // Hopefully the largest available
-      thumbnail_url: articleResponseTyped.yoast_head_json.og_image[0].url,
+      thumbnailUrl,
       date: articleResponseTyped.date_gmt,
     };
 

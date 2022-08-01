@@ -60,7 +60,7 @@ export interface YoastHeadJson {
     og_site_name: string;
     article_published_time: string;
     article_modified_time: string;
-    og_image: OgImage[];
+    og_image?: OgImage[];
     author: string;
     twitter_card: string;
     twitter_creator: string;

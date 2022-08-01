@@ -8,7 +8,7 @@ export interface ArticlePost {
     caption: string;
     url: string;
 
-    thumbnail_url: string | null;
+    thumbnailUrl: string | null;
 
     date: string;
 }

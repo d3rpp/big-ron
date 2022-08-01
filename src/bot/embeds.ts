@@ -24,7 +24,7 @@ export function getPostEmbed(article: ArticlePost): EmbedBuilder {
     .setDescription(getDesc())
     .setColor(Colors.Blue)
     .setURL(article.url)
-    .setThumbnail(article.thumbnail_url)
+    .setThumbnail(article.thumbnailUrl)
     .setAuthor({
       name: article.author.profile_name,
       iconURL: article.author.profile_picture_url,
