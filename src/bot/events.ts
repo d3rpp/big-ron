@@ -1,5 +1,7 @@
 import { ChatInputCommandInteraction, Interaction } from 'discord.js';
+import { getStatus } from '../config.js';
 import { getErrorEmbed } from './embeds.js';
+import { getBot } from './index.js';
 import { registerAll, resolve } from './register';
 
 async function onCommand(int: ChatInputCommandInteraction): Promise<void> {
@@ -27,5 +29,22 @@ export async function onInteraction(int: Interaction): Promise<void> {
 }
 
 export async function onReady(): Promise<void> {
+  const status = getStatus();
   await registerAll();
+
+  if (status !== null) {
+    const bot = getBot();
+    if (bot.user === null) {
+      throw new Error('UserClient not definied upon ready');
+    }
+
+    bot.user.setPresence({
+      status: 'online',
+      activities: [
+        {
+          name: status,
+        },
+      ],
+    });
+  }
 }

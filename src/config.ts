@@ -22,3 +22,7 @@ export function getRedisUrl(): string {
 export function getDevServer(): string | null {
   return getVal('DEV_SERVER', false);
 }
+
+export function getStatus(): string | null {
+  return getVal('STATUS', false);
+}
