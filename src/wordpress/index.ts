@@ -16,6 +16,7 @@ export const getArticleDetails = (APIRoot: string, postId: string): Promise<Arti
       `${APIRoot}/wp-json/wp/v2/posts/${postId}?_fields=${API_QUERY_FIELDS}`,
     );
     const articleResponseTyped = (await articleResponse.json()) as Article;
+    console.debug(articleResponseTyped);
 
     // Get Author Props
     // eslint-disable-next-line no-underscore-dangle
