@@ -53,8 +53,10 @@ export default async function startBot(): Promise<void> {
   const token = getToken();
   const bot = getBot();
 
+  bot.on('error', console.error);
   bot.on('interactionCreate', onInteraction);
   bot.once('ready', onReady);
 
   await bot.login(token);
 }
+
